@@ -7,7 +7,7 @@ export default function AddProductButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.button}>
-        <MaterialCommunityIcons color="white" size={25} name="plus-circle" />
+        <MaterialCommunityIcons color="white" size={30} name="plus-circle" />
       </View>
     </TouchableOpacity>
   );

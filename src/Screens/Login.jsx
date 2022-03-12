@@ -1,11 +1,15 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { TextInput, Button, DefaultTheme } from "react-native-paper";
 import AppInput from "../Components/AppInput";
 import AppLink from "../Components/AppLink";
+import Screen from "../Components/Screen";
+
 import OR from "../Components/OR";
 import MainContext from "../MainContext";
+import VerticalSpace from "../Components/VerticalSpace";
+import { FacebookButton, GoogleButton } from "../Components/AppButton";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -44,63 +48,71 @@ export default function Login({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.appLogo}>
-        <Image
-          style={{ width: 40, height: 40 }}
-          source={require("../assets/applogopurple.png")}
-        />
+    <Screen>
+      <View style={styles.container}>
+        <View style={styles.appLogo}>
+          <Image
+            style={{ width: 40, height: 40 }}
+            source={require("../assets/applogofacebookblue.png")}
+          />
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: "center",
+            }}
+          >
+            Welcome back
+          </Text>
+        </View>
         <Text
           style={{
-            fontSize: 20,
             textAlign: "center",
-            color: DefaultTheme.colors.primary,
+            marginBottom: 16,
+            color: DefaultTheme.colors.backdrop,
           }}
         >
-          Welcome back
+          Don't have an account?{" "}
+          <AppLink onPress={() => navigation.navigate("Register")}>
+            Register
+          </AppLink>
         </Text>
-      </View>
-      <AppInput
-        value={email}
-        keyboardType="email-address"
-        onChangeText={(text) => setEmail(text)}
-        mode="flat"
-        label="Enter email / phone no"
-      />
-      <AppInput
-        secureTextEntry={isPasswordHidden}
-        right={
-          <TextInput.Icon
-            onPress={() => setIsPasswordHidden((prev) => !prev)}
-            name={isPasswordHidden ? "eye" : "eye-off"}
-          />
-        }
-        mode="flat"
-        label="Enter password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
+        <AppInput
+          value={email}
+          keyboardType="email-address"
+          onChangeText={(text) => setEmail(text)}
+          mode="flat"
+          label="Enter email / phone no"
+        />
+        <AppInput
+          secureTextEntry={isPasswordHidden}
+          right={
+            <TextInput.Icon
+              onPress={() => setIsPasswordHidden((prev) => !prev)}
+              name={isPasswordHidden ? "eye" : "eye-off"}
+            />
+          }
+          mode="flat"
+          label="Enter password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
 
-      <Button
-        icon="login"
-        loading={isLoggingIn}
-        mode="contained"
-        onPress={handleSubmit}
-        disabled={isLoggingIn}
-      >
-        {isLoggingIn ? "Logging in..." : "Login"}
-      </Button>
-      <Text style={{ textAlign: "center", marginTop: 16 }}>
-        Don't have an account?{" "}
-        <AppLink onPress={() => navigation.navigate("Register")}>
-          Register
-        </AppLink>
-      </Text>
-      <OR />
-      <Button color="#4285F4" icon="google" mode="contained">
-        Login with google
-      </Button>
-    </View>
+        <Button
+          icon="login"
+          loading={isLoggingIn}
+          mode="contained"
+          onPress={handleSubmit}
+          disabled={isLoggingIn}
+        >
+          {isLoggingIn ? "Logging in..." : "Login"}
+        </Button>
+
+        <OR />
+        <GoogleButton text="Login with google" />
+        <VerticalSpace space={12} />
+        <FacebookButton text="Login with facebook" />
+      </View>
+    </Screen>
   );
 }
 
@@ -110,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "center",
-    backgroundColor: DefaultTheme.colors.primaryLight,
+    backgroundColor: "#ffffff",
   },
   appLogo: {
     flexDirection: "column",
@@ -118,6 +130,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 50,
     overflow: "hidden",
-    marginBottom: 24,
   },
 });

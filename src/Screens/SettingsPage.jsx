@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import React, { useContext, useState } from "react";
 
 import MainContext from "../MainContext";
@@ -50,7 +50,7 @@ export default function SettingsPage({ navigation }) {
 
   return (
     <ScrollView>
-      <View style={styles.listGroup}>
+      <View>
         {!isUserLoggedIn && (
           <>
             <AppList
@@ -84,7 +84,7 @@ export default function SettingsPage({ navigation }) {
           text="Watch later"
           onPress={() => navigation.navigate("WatchLater")}
         />
-        <AppList text="Share this app" />
+        <AppList text="Share this app" icon="no" />
         {isUserLoggedIn && (
           <AppList text="Logout" icon="no" color="red" onPress={handleLogout} />
         )}
@@ -92,5 +92,3 @@ export default function SettingsPage({ navigation }) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({});

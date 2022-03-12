@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  ImageBackground,
+} from "react-native";
 import React from "react";
 import { DefaultTheme } from "react-native-paper";
 
@@ -16,6 +22,15 @@ export function PageLoading({ text = "Loading..." }) {
       <ActivityIndicator size="large" color={DefaultTheme.colors.primary} />
       <Text style={{ marginTop: 8 }}>{text}</Text>
     </View>
+  );
+}
+
+export function HomePageLoading() {
+  return (
+    <ImageBackground
+      style={{ width: "100%", height: "100%" }}
+      source={require("../assets/homeskeletonplaceholder.gif")}
+    />
   );
 }
 

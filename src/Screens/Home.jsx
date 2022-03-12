@@ -1,153 +1,124 @@
 import {
   View,
   Text,
-  RefreshControl,
   StyleSheet,
   FlatList,
   ActivityIndicator,
-  ScrollView,
 } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
-import {
-  DefaultTheme,
-  Badge,
-  Card,
-  Paragraph,
-  Title,
-} from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { DefaultTheme } from "react-native-paper";
 import axios from "axios";
-import { PageLoading } from "../Components/Loading";
-import { useNavigation } from "@react-navigation/native";
-import AppFilter from "../Components/AppFilter";
-import AppCardHorizontal from "../Components/AppCardHorizontal";
+import { HomePageLoading } from "../Components/Loading";
+
+import AppCategory from "../Components/AppCategory";
+import AppCard from "../Components/AppCard";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [pageNo, setPageNo] = useState(2);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   async function handleRefresh() {
     try {
-      setIsRefreshing(true);
-      const response = await axios.get(`/ads/all/1`);
-      setProducts(response.data);
       setPageNo(2);
-      setIsRefreshing(false);
+      loadProducts();
+      setHasMoreData(true);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function loadMoreProduct() {
+  async function handleLoadMore() {
     try {
+      let response;
       if (hasMoreData) {
-        const response = await axios.get(`/ads/all/${pageNo}`);
-        if (response.data.length > 0) {
-          setPageNo((prev) => prev + 1);
-          setProducts((prev) => [...prev, ...response.data]);
-        } else {
-          setHasMoreData(false);
-        }
+        response = await axios.get(
+          `/ads/all/${pageNo}?categories=${JSON.stringify(categories)}`
+        );
+        setProducts((prev) => [...prev, ...response.data]);
+        setPageNo((prev) => prev + 1);
+      } else {
+        return;
       }
+      if (response.data.length < 1) {
+        setHasMoreData(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function loadProducts() {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `/ads/all/1?categories=${JSON.stringify(categories)}`
+      );
+      setProducts(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        const response = await axios.get("/ads/all/1");
-        setProducts(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
     loadProducts();
   }, []);
 
-  if (isLoading) {
-    return <PageLoading />;
-  }
+  useEffect(() => {
+    setHasMoreData(true);
+    loadProducts();
+  }, [categories]);
 
   return (
-    <View style={{ padding: 12 }}>
-      <Text style={styles.heading}>Premium Advertisments</Text>
+    <View style={{ flex: 1 }}>
+      <AppCategory appCategories={categories} setCategories={setCategories} />
+      {isLoading && <HomePageLoading />}
 
-      <FlatList
-        keyExtractor={(item, index) => item._id + index}
-        data={products}
-        extraData={products}
-        horizontal
-        renderItem={({ item }) => <AppCardHorizontal item={item} />}
-      />
-      <Text style={styles.heading}>Top deals</Text>
-
-      <FlatList
-        keyExtractor={(item) => item._id}
-        data={products}
-        extraData={products}
-        renderItem={({ item }) => <AppCard item={item} />}
-        refreshing={isRefreshing}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
-        }
-        onEndReachedThreshold={10}
-        onEndReached={loadMoreProduct}
-      />
-    </View>
-  );
-}
-
-function AppCard({ item }) {
-  const navigation = useNavigation();
-  return (
-    <Card
-      onPress={() =>
-        navigation.navigate("OneProduct", {
-          _id: item._id,
-          productName: item.title,
-        })
-      }
-      key={item._id}
-      style={{ marginBottom: 20 }}
-    >
-      <Card.Cover
-        resizeMode="stretch"
-        source={{
-          uri: item.previewImageUrl,
-        }}
-      />
-      <Badge style={styles.badge}>{item.imagesUrls.length} photos</Badge>
-      <Card.Title title={item.title}></Card.Title>
-      <Card.Content>
-        <Paragraph>{`${item.description.slice(0, 200)}...`}</Paragraph>
-        <Title style={{ color: DefaultTheme.colors.primary }}>
-          Price: ₹{item.price}/-
-        </Title>
-      </Card.Content>
-    </Card>
-  );
-}
-
-function ListFooter() {
-  return (
-    <View>
-      <ActivityIndicator
-        style={{ marginVertical: 12 }}
-        size="large"
-        color={DefaultTheme.colors.primary}
-      />
-      <Text
-        style={{
-          textAlign: "center",
-        }}
-      >
-        Loading more items for you...
-      </Text>
+      <View>
+        <FlatList
+          numColumns={2}
+          keyExtractor={(item) => item._id}
+          data={products}
+          onEndReached={handleLoadMore}
+          refreshing={isLoading}
+          onRefresh={handleRefresh}
+          onEndReachedThreshold={1}
+          renderItem={({ item }) => <AppCard item={item} />}
+          ListEmptyComponent={() => (
+            <Text
+              style={{
+                color: DefaultTheme.colors.backdrop,
+                textAlign: "center",
+              }}
+            >
+              No product found
+            </Text>
+          )}
+          ListFooterComponent={() => (
+            <View style={{ marginTop: 16, padding: 8, marginBottom: 80 }}>
+              {hasMoreData ? (
+                <ActivityIndicator
+                  color={DefaultTheme.colors.primary}
+                  size="large"
+                />
+              ) : (
+                <Text
+                  style={{
+                    color: DefaultTheme.colors.backdrop,
+                    textAlign: "center",
+                  }}
+                >
+                  You have reached the end
+                </Text>
+              )}
+            </View>
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -162,6 +133,7 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: "400",
     fontSize: 20,
+    color: "#333",
     marginBottom: 12,
   },
 });

@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet } from "react-native";
-import React, { useContext, useState } from "react";
+import { View, Text } from "react-native";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import AppInput from "../Components/AppInput";
 import AppButton from "../Components/AppButton";
+import Screen from "../Components/Screen";
 import axios from "axios";
 import MainContext from "../MainContext";
 import { TextInput } from "react-native-paper";
@@ -34,43 +35,39 @@ export default function ChangePassword() {
     }
   }
 
-  if (isLoading) {
-    return <PageLoading text="Changing password..." />;
-  }
-
   return (
-    <ScrollView style={{ padding: 12 }}>
-      <AppInput
-        secureTextEntry={isCurrPassHidden}
-        right={
-          <TextInput.Icon
-            onPress={() => setIsCurrPassHidden((prev) => !prev)}
-            name={isCurrPassHidden ? "eye" : "eye-off"}
-          />
-        }
-        value={currPass}
-        onChangeText={(text) => setCurrPass(text)}
-        label="Current password"
-      />
+    <Screen>
+      <View style={{ padding: 12 }}>
+        <AppInput
+          secureTextEntry={isCurrPassHidden}
+          right={
+            <TextInput.Icon
+              onPress={() => setIsCurrPassHidden((prev) => !prev)}
+              name={isCurrPassHidden ? "eye" : "eye-off"}
+            />
+          }
+          value={currPass}
+          onChangeText={(text) => setCurrPass(text)}
+          label="Current password"
+        />
 
-      <AppInput
-        secureTextEntry={isNewPassHidden}
-        right={
-          <TextInput.Icon
-            onPress={() => setIsNewPassHidden((prev) => !prev)}
-            name={isNewPassHidden ? "eye" : "eye-off"}
-          />
-        }
-        value={newPass}
-        onChangeText={(text) => setNewPass(text)}
-        label="New password"
-      />
+        <AppInput
+          secureTextEntry={isNewPassHidden}
+          right={
+            <TextInput.Icon
+              onPress={() => setIsNewPassHidden((prev) => !prev)}
+              name={isNewPassHidden ? "eye" : "eye-off"}
+            />
+          }
+          value={newPass}
+          onChangeText={(text) => setNewPass(text)}
+          label="New password"
+        />
 
-      <AppButton onPress={handleChangePassword} mode="contained">
-        Change password
-      </AppButton>
-    </ScrollView>
+        <AppButton onPress={handleChangePassword} mode="contained">
+          Change password
+        </AppButton>
+      </View>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({});

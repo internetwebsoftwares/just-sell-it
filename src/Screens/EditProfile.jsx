@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import AppInput from "../Components/AppInput";
 import AppButton from "../Components/AppButton";
+import Screen from "../Components/Screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PageLoading } from "../Components/Loading";
 import axios from "axios";
@@ -77,31 +78,31 @@ export default function EditProfile() {
   }
 
   return (
-    <ScrollView style={{ padding: 12 }}>
-      <AppInput
-        mode="flat"
-        label="Firstname"
-        onChangeText={(text) => setFirstName(text)}
-        value={firstName}
-      />
-      <AppInput
-        mode="flat"
-        label="Lastname"
-        onChangeText={(text) => setLastName(text)}
-        value={lastName}
-      />
-      <AppInput
-        mode="flat"
-        keyboardType="numeric"
-        label="Phone number"
-        onChangeText={(text) => setPhoneNumber(text)}
-        value={phoneNumber}
-      />
-      <AppButton onPress={handleUpdate} mode="contained">
-        Update your info
-      </AppButton>
-    </ScrollView>
+    <Screen>
+      <View style={{ padding: 12 }}>
+        <AppInput
+          mode="flat"
+          label="Firstname"
+          onChangeText={(text) => setFirstName(text)}
+          value={firstName}
+        />
+        <AppInput
+          mode="flat"
+          label="Lastname"
+          onChangeText={(text) => setLastName(text)}
+          value={lastName}
+        />
+        <AppInput
+          mode="flat"
+          keyboardType="numeric"
+          label="Phone number"
+          onChangeText={(text) => setPhoneNumber(text)}
+          value={phoneNumber}
+        />
+        <AppButton onPress={handleUpdate} mode="contained">
+          Update your info
+        </AppButton>
+      </View>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({});

@@ -8,7 +8,7 @@ export default function AppCardHorizontal({ item }) {
       <View style={styles.container}>
         <Image source={{ uri: item.previewImageUrl }} style={styles.image} />
         <View style={{ padding: 8 }}>
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>{`${item.title.slice(0, 50)}...`}</Text>
           <Text style={styles.description} numberOfLines={3}>
             {`${item.description.slice(0, 100)}...`}
           </Text>
@@ -21,29 +21,29 @@ export default function AppCardHorizontal({ item }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginRight: 8,
+    marginRight: 16,
     borderRadius: 5,
     width: 300,
     height: 140,
     flexDirection: "row",
-    borderWidth: 1,
     overflow: "hidden",
+    borderWidth: 1,
     borderColor: "#e6e6e6",
-    marginBottom: 100,
+    marginBottom: 12,
     alignContent: "center",
     alignItems: "center",
   },
   image: {
-    width: 100,
+    width: 110,
     height: 200,
   },
   title: {
-    width: 180,
+    width: 170,
     fontWeight: "bold",
     marginBottom: 8,
   },
   description: {
-    width: 180,
+    width: 170,
     color: "grey",
     marginBottom: 8,
   },

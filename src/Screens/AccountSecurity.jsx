@@ -1,12 +1,12 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import AppInput from "../Components/AppInput";
 import AppButton from "../Components/AppButton";
 import AppList from "../Components/AppList";
+import Screen from "../Components/Screen";
 import axios from "axios";
 import MainContext from "../MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage/";
-import { PageLoading } from "../Components/Loading";
 import { useNavigation } from "@react-navigation/native";
 
 function PromptModal({ inputValue, setInputValue, setIsModalOpen }) {
@@ -53,10 +53,6 @@ function PromptModal({ inputValue, setInputValue, setIsModalOpen }) {
     }
   }
 
-  if (isLoading) {
-    return <PageLoading text="Deleting account..." />;
-  }
-
   return (
     <View style={styles.modalContainer}>
       <TouchableOpacity
@@ -70,13 +66,16 @@ function PromptModal({ inputValue, setInputValue, setIsModalOpen }) {
           onChangeText={(text) => setInputValue(text)}
           label="Enter password"
         />
-        <AppButton
-          mode="contained"
-          onPress={() => handleDeleteAccount(inputValue)}
-        >
-          Delete account
-        </AppButton>
-        <AppButton onPress={() => setIsModalOpen(false)}>Cancel</AppButton>
+        <View style={styles.modalButtonContainer}>
+          <AppButton
+            loading={isLoading}
+            disabled={isLoading}
+            onPress={() => handleDeleteAccount(inputValue)}
+          >
+            Delete account
+          </AppButton>
+          <AppButton onPress={() => setIsModalOpen(false)}>Cancel</AppButton>
+        </View>
       </View>
     </View>
   );
@@ -85,27 +84,30 @@ function PromptModal({ inputValue, setInputValue, setIsModalOpen }) {
 export default function AccountSecurity({ navigation }) {
   const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <View style={{ flex: 1 }}>
-      {isModalOpen && (
-        <PromptModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          inputValue={password}
-          setInputValue={setPassword}
+    <Screen>
+      <View style={{ flex: 1 }}>
+        {isModalOpen && (
+          <PromptModal
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            inputValue={password}
+            setInputValue={setPassword}
+          />
+        )}
+        <AppList
+          onPress={() => navigation.navigate("ChangePassword")}
+          text="Change password"
         />
-      )}
-      <AppList
-        onPress={() => navigation.navigate("ChangePassword")}
-        text="Change password"
-      />
-      <AppList
-        onPress={() => setIsModalOpen(true)}
-        text="Delete account"
-        color="red"
-        icon="no"
-      />
-    </View>
+        <AppList
+          onPress={() => setIsModalOpen(true)}
+          text="Delete account"
+          color="red"
+          icon="no"
+        />
+      </View>
+    </Screen>
   );
 }
 
@@ -123,17 +125,21 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     position: "absolute",
-    backgroundColor: "rgba(0,0,0,.5)",
+    backgroundColor: "#33333390",
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
+    height: "100%",
+    zIndex: -1,
   },
   modal: {
     backgroundColor: "#fff",
-    padding: 10,
     position: "absolute",
     width: 280,
     borderRadius: 4,
+  },
+  modalButtonContainer: {
+    flexDirection: "row-reverse",
   },
 });

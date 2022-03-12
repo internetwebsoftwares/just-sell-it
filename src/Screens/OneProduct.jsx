@@ -1,13 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
   Card,
   DefaultTheme,
@@ -15,36 +7,15 @@ import {
   Paragraph,
   Title,
 } from "react-native-paper";
-import ImageViewer from "react-native-image-zoom-viewer";
-import axios from "axios";
-import { PageLoading } from "../Components/Loading";
 import AppButton from "../Components/AppButton";
 import AppBadge from "../Components/AppBadge";
 import AppImageSlider from "../Components/AppImageSlider";
 import AppImageViewer from "../Components/AppImageViewer";
 
 export default function OneProduct({ route }) {
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [product, setProduct] = useState(route.params.product);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
-
-  useEffect(() => {
-    async function loadProduct() {
-      try {
-        const response = await axios.get(`/ad/${route.params._id}`);
-        setProduct(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadProduct();
-  }, []);
-
-  if (isLoading) {
-    return <PageLoading />;
-  }
 
   return (
     <>
@@ -64,6 +35,13 @@ export default function OneProduct({ route }) {
         />
 
         <Card.Content style={{ marginTop: 16 }}>
+          <Title
+            style={{
+              color: DefaultTheme.colors.primary,
+            }}
+          >
+            Price: ₹{product.price}/-
+          </Title>
           <Headline>{product.title}</Headline>
           <View
             style={{ display: "flex", flexDirection: "row", marginVertical: 8 }}
@@ -72,34 +50,28 @@ export default function OneProduct({ route }) {
           </View>
 
           <Paragraph>{product.description}</Paragraph>
-          <View style={{ marginTop: 12 }}></View>
-          <Text style={{ fontWeight: "200" }}>
-            Owner:{" "}
-            <Text style={{ fontWeight: "bold" }}>{product.ownerName}</Text>
-          </Text>
-          <Text style={{ fontWeight: "200" }}>
-            Contact no:{" "}
-            <Text style={{ fontWeight: "bold" }}>
-              {product.contactPhoneNumber}
+          <View style={{ marginVertical: 24 }}>
+            <Text style={{ fontWeight: "200" }}>
+              Owner:{" "}
+              <Text style={{ fontWeight: "bold" }}>{product.ownerName}</Text>
             </Text>
-          </Text>
-          <Title
-            style={{ color: DefaultTheme.colors.primary, marginVertical: 12 }}
-          >
-            Price: ₹{product.price}/-
-          </Title>
+            <Text style={{ fontWeight: "200" }}>
+              Contact no:{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {product.contactPhoneNumber}
+              </Text>
+            </Text>
+          </View>
 
-          <View style={{ marginTop: 50 }}>
+          <View>
             <AppButton
+              icon="history"
               mode="contained"
               onPress={() => console.log("Did u click me")}
             >
               Add to watch later
             </AppButton>
-            <AppButton
-              mode="text"
-              onPress={() => console.log("Did u click me")}
-            >
+            <AppButton onPress={() => console.log("Did u click me")}>
               Chat with owner
             </AppButton>
           </View>
@@ -109,16 +81,4 @@ export default function OneProduct({ route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  fullScreenContainer: {
-    backgroundColor: "#000",
-    flex: 1,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    zIndex: 2000,
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});

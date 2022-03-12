@@ -9,6 +9,6 @@ export default function AppInput({ ...props }) {
 const styles = StyleSheet.create({
   input: {
     marginBottom: 12,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
   },
 });
