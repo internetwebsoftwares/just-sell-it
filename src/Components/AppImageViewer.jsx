@@ -18,7 +18,13 @@ export default function AppImageViewer({
   imageIndex,
 }) {
   return (
-    <Modal visible={isModalVisible} transparent={true}>
+    <Modal
+      onRequestClose={() => setIsModalVisible(false)}
+      visible={isModalVisible}
+      transparent={true}
+      animationType="fade"
+      statusBarTranslucent
+    >
       <ImageViewer
         imageUrls={imagesUrls.map((image) => {
           return { url: image };
@@ -30,15 +36,6 @@ export default function AppImageViewer({
         onSwipeDown={() => setIsModalVisible(false)}
         onCancel={() => setIsModalVisible(false)}
         index={imageIndex}
-        renderHeader={() => {
-          return (
-            <View>
-              <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-                <Text style={styles.closeIcon}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
       />
     </Modal>
   );

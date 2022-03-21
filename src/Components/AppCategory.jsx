@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet, Text } from "react-native";
 import React, { useState } from "react";
-import categories from "../utils/categoires";
+import categories from "../utils/categories";
 import { Chip, DefaultTheme } from "react-native-paper";
 
 export default function AppCategory({ appCategories, setCategories }) {
@@ -37,8 +37,8 @@ export default function AppCategory({ appCategories, setCategories }) {
   }
 
   return (
-    <View style={{ padding: 10 }}>
-      <ScrollView horizontal>
+    <View>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", maxHeight: 650 }}>
         {listOfCategories.map((category) => {
           return (
             <Chip
@@ -53,7 +53,7 @@ export default function AppCategory({ appCategories, setCategories }) {
             </Chip>
           );
         })}
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -61,7 +61,9 @@ export default function AppCategory({ appCategories, setCategories }) {
 const styles = StyleSheet.create({
   chip: {
     backgroundColor: DefaultTheme.colors.primaryLight,
-    marginRight: 8,
+    flexDirection: "row",
+    marginVertical: 8,
+    marginRight: 5,
   },
   selected: {
     backgroundColor: DefaultTheme.colors.primary,

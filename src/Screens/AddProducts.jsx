@@ -2,10 +2,10 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Text,
   Image,
   TouchableOpacity,
   ToastAndroid,
+  Text,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,7 +13,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppInput from "../Components/AppInput";
 import AppButton from "../Components/AppButton";
 import Screen from "../Components/Screen";
-import AppLink from "../Components/AppLink";
 import AppSelect from "../Components/AppSelect";
 import VerticalSpace from "../Components/VerticalSpace";
 import * as ImagePicker from "expo-image-picker";
@@ -21,14 +20,17 @@ import MainContext from "../MainContext";
 import { PageLoading } from "../Components/Loading";
 import { DefaultTheme } from "react-native-paper";
 
+import categories from "../utils/categories";
+
 export default function AddProducts() {
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [district, setDistrict] = useState("");
+  const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const horizontalScrollRef = useRef();
   const { userToken } = useContext(MainContext);
@@ -51,8 +53,6 @@ export default function AddProducts() {
           },
         ]);
       }
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -82,8 +82,9 @@ export default function AddProducts() {
       data.append("title", title);
       data.append("description", description);
       data.append("price", price);
+      data.append("state", state);
+      data.append("district", district);
       data.append("city", city);
-      data.append("contactPhoneNumber", contactPhoneNumber);
 
       images.forEach((image) => {
         data.append("images", {
@@ -110,8 +111,9 @@ export default function AddProducts() {
         setTitle("");
         setDescription("");
         setPrice("");
+        setState("");
+        setDistrict("");
         setCity("");
-        setContactPhoneNumber("");
         ToastAndroid.show(textResponse, ToastAndroid.SHORT);
       }
 
@@ -161,11 +163,18 @@ export default function AddProducts() {
               style={styles.imagePickerIcon}
               onPress={handleImagePicker}
             >
-              <MaterialCommunityIcons name="camera" size={32} />
+              <MaterialCommunityIcons
+                color={DefaultTheme.colors.primary}
+                name="camera"
+                size={32}
+              />
+              <Text style={{ color: DefaultTheme.colors.primary }}>
+                {images.length ? "Select more" : "Select image"}
+              </Text>
             </TouchableOpacity>
           )}
         </ScrollView>
-        <AppSelect setCategory={setCategory} />
+        <AppSelect data={categories} list={category} setList={setCategory} />
         <AppInput
           label="Title"
           placeholder="eg: 32 inches LED TV"
@@ -187,22 +196,26 @@ export default function AddProducts() {
           onChangeText={(text) => setPrice(text)}
         />
         <AppInput
-          label="City"
-          value={city}
-          onChangeText={(text) => setCity(text)}
+          label="State"
+          value={state}
+          autoCapitalize="sentences"
+          onChangeText={(text) => setState(text)}
         />
         <AppInput
-          label="Contact phone number"
-          value={contactPhoneNumber}
-          keyboardType="numeric"
-          maxLength={10}
-          onChangeText={(text) => setContactPhoneNumber(text)}
+          label="District"
+          value={district}
+          autoCapitalize="sentences"
+          onChangeText={(text) => setDistrict(text)}
         />
 
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text>Want to try our premium services? </Text>
-          <AppLink>Learn more</AppLink>
-        </View>
+        <AppInput
+          label="City"
+          value={city}
+          autoCapitalize="sentences"
+          onChangeText={(text) => setCity(text)}
+          onSubmitEnding={handleUpload}
+        />
+
         <VerticalSpace space={16} />
 
         <AppButton mode="contained" onPress={handleUpload}>

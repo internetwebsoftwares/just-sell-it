@@ -1,11 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { DefaultTheme } from "react-native-paper";
 
 export default function OR() {
   return (
     <View style={styles.container}>
       <View style={styles.line}></View>
-      <Text style={{ marginHorizontal: 12, color: "grey" }}>or</Text>
+      <Text
+        style={{ marginHorizontal: 12, color: DefaultTheme.colors.backdrop }}
+      >
+        or
+      </Text>
       <View style={styles.line}></View>
     </View>
   );

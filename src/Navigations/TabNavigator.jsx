@@ -8,6 +8,7 @@ import AddProductButton from "./AddProductButton";
 import SettingsNavigator from "./SettingsNavigator";
 import MainContext from "../MainContext";
 import { DefaultTheme } from "react-native-paper";
+import Login from "../Screens/Login";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,20 +53,23 @@ export default function TabNavigator({ iconSize, iconColor }) {
                 if (isUserLoggedIn) {
                   navigation.navigate("AddProduct");
                 } else {
-                  Alert.alert("Message", "Please login to sell your items", [
-                    { text: "cancel" },
-                    {
-                      text: "login",
-                      onPress: () => navigation.navigate("Login"),
-                    },
-                  ]);
+                  Alert.alert(
+                    "Message",
+                    "Please login / register to sell your products",
+                    [
+                      { text: "cancel" },
+                      {
+                        text: "login",
+                        onPress: () => navigation.navigate("Login"),
+                      },
+                    ]
+                  );
                 }
               }}
             />
           ),
         })}
       />
-
       <Tab.Screen
         name="Settings"
         component={SettingsNavigator}

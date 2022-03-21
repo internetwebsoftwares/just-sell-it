@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Platform, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import axios from "axios";
 import { useStorage } from "@ugenc/use-storage-hook";
@@ -10,11 +10,24 @@ import MainContext from "./src/MainContext";
 
 axios.defaults.baseURL = "http://api-sell-it.herokuapp.com";
 
+// ios client id
+// 848015990033-72hkbv70h5lhrfjq6nae1oavnf4dq2m8.apps.googleusercontent.com
+// Android client id
+// 848015990033-hmos4csdgkviq75518sp5967em03pf7d.apps.googleusercontent.com
+// Web client id
+// 848015990033-l3ds21mr10k3ggu80l98enshq85qlc84.apps.googleusercontent.com
+
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn, removeIsUserLoggedIn] =
     useStorage("isUserLoggedIn");
   const [appUser, setAppUser, removeAppUser] = useStorage("appUser");
   const [userToken, setUserToken, removeUserToken] = useStorage("appAuthToken");
+
+  // async function clearLocalStorage() {
+  //   await AsyncStorage.clear();
+  // }
+
+  // clearLocalStorage();
 
   return (
     <MainContext.Provider
@@ -41,11 +54,3 @@ export default function App() {
     </MainContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    backgroundColor: "#fff",
-  },
-});

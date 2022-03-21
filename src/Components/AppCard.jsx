@@ -26,7 +26,7 @@ export default function AppCardHorizontal({ item }) {
           <View
             style={{
               padding: 12,
-              backgroundColor: "#f2f2f290",
+              backgroundColor: DefaultTheme.colors.surface,
               flex: 1,
               width: "100%",
             }}
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     height: 400,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#e6e6e6",
+    borderColor: DefaultTheme.colors.primaryLight,
     alignContent: "center",
     alignItems: "center",
   },

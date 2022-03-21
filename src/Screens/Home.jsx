@@ -10,16 +10,19 @@ import { DefaultTheme } from "react-native-paper";
 import axios from "axios";
 import { HomePageLoading } from "../Components/Loading";
 
-import AppCategory from "../Components/AppCategory";
 import AppCard from "../Components/AppCard";
+import AppFilterHeader from "../Components/AppFilterHeader";
+import FilterModal from "../Components/FilterModal";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [pageNo, setPageNo] = useState(2);
   const [isLoading, setIsLoading] = useState(true);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [priceRange, setPriceRange] = useState([5000, 200000]);
   const [categories, setCategories] = useState([]);
-  const [filters, setFilters] = useState([]);
+  const [sortBy, setSortBy] = useState("1");
 
   async function handleRefresh() {
     try {
@@ -35,10 +38,8 @@ export default function Home() {
     try {
       let response;
       if (hasMoreData) {
-        response = await axios.get(
-          `/ads/all/${pageNo}?categories=${JSON.stringify(categories)}`
-        );
-        setProducts((prev) => [...prev, ...response.data]);
+        response = await axios.get(`/ads/all/${pageNo}?categories=[]`);
+        setProducts((prev) => [...prev, ...response.data.results]);
         setPageNo((prev) => prev + 1);
       } else {
         return;
@@ -54,10 +55,8 @@ export default function Home() {
   async function loadProducts() {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `/ads/all/1?categories=${JSON.stringify(categories)}`
-      );
-      setProducts(response.data);
+      const response = await axios.get(`/ads/all/1?categories=[]`);
+      setProducts(response.data.results);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -68,15 +67,23 @@ export default function Home() {
     loadProducts();
   }, []);
 
-  useEffect(() => {
-    setHasMoreData(true);
-    loadProducts();
-  }, [categories]);
-
   return (
     <View style={{ flex: 1 }}>
-      <AppCategory appCategories={categories} setCategories={setCategories} />
       {isLoading && <HomePageLoading />}
+
+      <AppFilterHeader onPress={() => setIsFilterOpen(true)} />
+      <FilterModal
+        showCategory={true}
+        visible={isFilterOpen}
+        setIsFilterVisible={setIsFilterOpen}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        setCategories={setCategories}
+        appCategories={categories}
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        handleLoadProduct={loadProducts}
+      />
 
       <View>
         <FlatList

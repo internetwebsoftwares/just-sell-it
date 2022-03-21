@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "JustSellIt",
+    "name": "Just Sell It",
     "slug": "JustSellIt",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/appiconwithtitle.png",
     "splash": {
-      "image": "./src/assets/appsplashblue.png",
+      "image": "./src/assets/splashblue.png",
       "resizeMode": "contain",
       "backgroundColor": "#4267B2"
     },
@@ -15,16 +15,24 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.justsellit.app",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.848015990033-72hkbv70h5lhrfjq6nae1oavnf4dq2m8"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/appiconwithtitle.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.justsellit.app",
+      "versionCode": 2
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/appicon.png"
     },
     "plugins": [
       [

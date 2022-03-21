@@ -12,6 +12,7 @@ export default function SettingsPage({ navigation }) {
     isUserLoggedIn,
     setIsUserLoggedIn,
     setAppUser,
+    appUser,
     userToken,
     setUserToken,
   } = useContext(MainContext);
@@ -37,8 +38,6 @@ export default function SettingsPage({ navigation }) {
       setAppUser({});
       setUserToken("");
       setIsUserLoggedIn(false);
-
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -60,12 +59,18 @@ export default function SettingsPage({ navigation }) {
 
             <AppList
               text="Register"
-              onPress={() => navigation.navigate("Register")}
+              onPress={() => navigation.navigate("RegisterPage1")}
             />
           </>
         )}
         {isUserLoggedIn && (
           <>
+            {appUser.isAdmin && (
+              <AppList
+                text="Admin dashboard"
+                onPress={() => navigation.navigate("AdminDashboard")}
+              />
+            )}
             <AppList
               text="Account Security"
               onPress={() => navigation.navigate("AccountSecurity")}
@@ -75,16 +80,16 @@ export default function SettingsPage({ navigation }) {
               onPress={() => navigation.navigate("EditProfile")}
             />
             <AppList
-              text="Your Ads"
+              text="My Ads"
               onPress={() => navigation.navigate("YourAds")}
             />
           </>
         )}
-        <AppList
-          text="Watch later"
-          onPress={() => navigation.navigate("WatchLater")}
-        />
-        <AppList text="Share this app" icon="no" />
+        {/* <AppList
+          text="Saved products"
+          onPress={() => navigation.navigate("SavedProducts")}
+        /> */}
+        {/* <AppList text="Share this app" icon="no" /> */}
         {isUserLoggedIn && (
           <AppList text="Logout" icon="no" color="red" onPress={handleLogout} />
         )}

@@ -37,7 +37,6 @@ function PromptModal({ inputValue, setInputValue, setIsModalOpen }) {
         },
       });
       setIsLoading(false);
-      console.log(response.data);
 
       if (response.data === "Your account has been deleted") {
         removeUserInfoFromStorage();

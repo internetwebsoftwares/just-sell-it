@@ -9,6 +9,8 @@ import React, { useEffect, useState } from "react";
 import { DefaultTheme } from "react-native-paper";
 import axios from "axios";
 import { HomePageLoading } from "../Components/Loading";
+import AppFilterHeader from "../Components/AppFilterHeader";
+import FilterModal from "../Components/FilterModal";
 
 import AppCard from "../Components/AppCard";
 
@@ -17,11 +19,11 @@ export default function ViewProducts({ route }) {
   const [pageNo, setPageNo] = useState(2);
   const [isLoading, setIsLoading] = useState(true);
   const [hasMoreData, setHasMoreData] = useState(true);
-  const [searchedQuery, setSearchedQuery] = useState(
-    route.params.searchedQuery
-  );
-  const [priceRange, setPriceRange] = useState([5000, 20000]);
+  const searchedQuery = route.params.searchedQuery;
+  const [priceRange, setPriceRange] = useState([5000, 200000]);
+  const [categories, setCategories] = useState([]);
   const [sortBy, setSortBy] = useState("1");
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
 
   async function handleRefresh() {
     try {
@@ -64,8 +66,7 @@ export default function ViewProducts({ route }) {
           priceRange
         )}&sortBy=${sortBy}`
       );
-      console.log("Searched", searchedQuery);
-      console.log("Data", response.data);
+
       setProducts(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -82,6 +83,17 @@ export default function ViewProducts({ route }) {
       {isLoading && <HomePageLoading />}
 
       <View>
+        <AppFilterHeader onPress={() => setIsFilterVisible(true)} />
+        <FilterModal
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          visible={isFilterVisible}
+          setIsFilterVisible={setIsFilterVisible}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          setCategories={setCategories}
+          appCategories={categories}
+        />
         <FlatList
           numColumns={2}
           keyExtractor={(item) => item._id}

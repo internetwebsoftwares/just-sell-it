@@ -89,12 +89,6 @@ export default function SearchPage({ navigation }) {
           }}
         />
 
-        {searchedItems.length < 1 && hasMoreData && (
-          <Text style={{ textAlign: "center", color: "grey" }}>
-            Could not found what you are looking for :(
-          </Text>
-        )}
-
         <View style={{ flex: 1 }}>
           <FlatList
             data={searchedItems}

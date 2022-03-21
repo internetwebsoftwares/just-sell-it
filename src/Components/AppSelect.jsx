@@ -1,25 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import categories from "../utils/categoires";
 
-export default function AppSelect({ setCategory }) {
-  const [selectedValue, setSelectedValue] = useState("Select category");
-
+export default function AppSelect({ data, list, setList }) {
   return (
     <View style={styles.container}>
       <Picker
-        selectedValue={selectedValue}
+        selectedValue={list}
         style={{ height: 50, width: "100%", color: "#666" }}
         onValueChange={(itemValue) => {
-          setCategory(itemValue);
-          setSelectedValue(itemValue);
+          setList(itemValue);
         }}
       >
-        {categories.map((category) => {
-          return (
-            <Picker.Item key={category} label={category} value={category} />
-          );
+        {data.map((data) => {
+          return <Picker.Item key={data} label={data} value={data} />;
         })}
       </Picker>
     </View>
