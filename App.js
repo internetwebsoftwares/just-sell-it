@@ -10,13 +10,6 @@ import MainContext from "./src/MainContext";
 
 axios.defaults.baseURL = "http://api-sell-it.herokuapp.com";
 
-// ios client id
-// 848015990033-72hkbv70h5lhrfjq6nae1oavnf4dq2m8.apps.googleusercontent.com
-// Android client id
-// 848015990033-hmos4csdgkviq75518sp5967em03pf7d.apps.googleusercontent.com
-// Web client id
-// 848015990033-l3ds21mr10k3ggu80l98enshq85qlc84.apps.googleusercontent.com
-
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn, removeIsUserLoggedIn] =
     useStorage("isUserLoggedIn");
